@@ -17,7 +17,5 @@ class TreeSearch:
 if __name__ == "__main__":
     TS = TreeSearch()
     TS.mtcs()
-    print('Start MTCS')
-    print('Start MTCS')
     cv2.destroyAllWindows()
 
