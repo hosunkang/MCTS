@@ -6,12 +6,11 @@ def make_ground():
     return bg
 
 class TreeSearch:
-    def __init__(self): 
+    def __init__(self):
         pass
     def mtcs(self):
         print('Start MTCS')
-        print('Start MTCS')
-        print('Start MTCS')
+
         bg = np.full((800,1500,3),255,np.uint8)
         cv2.imshow('Window', bg)
         cv2.waitKey(0)
