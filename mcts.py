@@ -10,6 +10,8 @@ class TreeSearch:
         pass
     def mtcs(self):
         print('Start MTCS')
+        print('Start MTCS')
+        print('Start MTCS')
         bg = np.full((800,1500,3),255,np.uint8)
         cv2.imshow('Window', bg)
         cv2.waitKey(0)
