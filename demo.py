@@ -14,6 +14,8 @@ class MyWindow(QMainWindow, form_class):
 
         self.value_planar = self.slider_planar.value()
         self.mcts_planar = self.slider_mcts.value()
+        self.startpt = (10,250)
+        self.goalpt = (1000,250)
 
         self.bt_draw_planar.clicked.connect(self.bt_draw_clicked)
         self.bt_mcts.clicked.connect(self.bt_mcts_clicked)
@@ -36,20 +38,24 @@ class MyWindow(QMainWindow, form_class):
 
         # Start
         qp.setBrush(Qt.green)
-        qp.drawRect(0, 240, 20, 20)
+        qp.drawRect(self.startpt[0]-10, self.startpt[1]-10, 20, 20)
         # Goal
         qp.setBrush(Qt.red)
-        qp.drawRect(990, 250, 20, 20)
+        qp.drawRect(self.goalpt[0]-10, self.goalpt[1]-10, 20, 20)
 
+        self.planars = []
         qp.setBrush(Qt.SolidPattern)
         for i in range(self.value_planar):
             w = random.randrange(0, 1000)
             h = random.randrange(0, 450)
             qp.drawRect(w, h, 20, 20)
+            self.planars.append([w+10, h+10])
         self.draw_label.setPixmap(self.pix)
 
     def bt_mcts_clicked(self):
         print("Click MCTS button")
+        print(self.startpt, self.goalpt)
+        print(self.planars)
 
 if __name__ == '__main__':
    app = QApplication(sys.argv)
