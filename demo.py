@@ -1,11 +1,52 @@
 from email.charset import QP
-import sys, random
+from re import X
+import sys, random, math
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap, QPainter
 from PyQt5.QtCore import Qt
 
 form_class = uic.loadUiType("ui_treesearch.ui")[0]
+
+class FunctionMCTS:
+    def __init__(self):
+        super().__init__()
+        self.iterations = 5
+        self.limit_l = 200
+
+    def mcts(self, spt, gpt, pts):
+        root_node = spt
+
+        for i in range(self.iterations):
+            se_node = self.selection(spt, pts)
+            ex_node = self.expansion(pts, se_node)
+            result = self.simulation(spt, gpt, pts, ex_node)
+            self.backprop(result)
+
+    def selection(self, spt, pts):
+        for i in range(len(pts)):
+            x = pts[i][0] - spt[0]
+            y = pts[i][1] - spt[1]
+            l = math.sqrt((x*x)+(y*y))
+            if l < self.limit_l and x > 0:
+                nodes.append(x)
+        self.tree_policy(spt, pts)
+
+    def expansion(self):
+        print("default policy")
+
+    def simulation(self, spt, gpt, ):
+        print("default policy")
+
+    def backpropa(self):
+        print("default policy")
+
+    def tree_policy(self, spt, pts):
+
+        
+
+    def default_policy(self):
+        print("default policy")
 
 class MyWindow(QMainWindow, form_class):
     def __init__(self):
@@ -54,8 +95,8 @@ class MyWindow(QMainWindow, form_class):
 
     def bt_mcts_clicked(self):
         print("Click MCTS button")
-        print(self.startpt, self.goalpt)
-        print(self.planars)
+        mcts = FunctionMCTS()
+        mcts.mcts(self.startpt, self.goalpt, self.planars)
 
 if __name__ == '__main__':
    app = QApplication(sys.argv)
