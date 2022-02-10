@@ -1,11 +1,7 @@
-from email.charset import QP
-from itertools import count
-from re import X
 import sys, random, math
-from unittest import result
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
-from PyQt5.QtGui import QPixmap, QPainter, QPen
+from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor
 from PyQt5.QtCore import Qt
 
 form_class = uic.loadUiType("ui_treesearch.ui")[0]
@@ -14,11 +10,10 @@ class MyWindow(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.clean = QPixmap(self.draw_label.size())
 
         self.value_planar = self.slider_planar.value()
-        self.mcts_planar = self.slider_mcts.value()
-        self.startpt = (10,250)
-        self.goalpt = (1000,250)
+        self.value_mcts = self.slider_mcts.value()
 
         self.bt_draw_planar.clicked.connect(self.bt_draw_clicked)
         self.bt_mcts.clicked.connect(self.bt_mcts_clicked)
@@ -35,6 +30,8 @@ class MyWindow(QMainWindow, form_class):
 
     def bt_draw_clicked(self):
         print("Click Draw planar button")
+        self.startpt = (10,250)
+        self.goalpt = (1000,250)
         self.planars = []
         self.pix = QPixmap(self.draw_label.size())
         self.pix.fill(Qt.transparent)
@@ -53,28 +50,42 @@ class MyWindow(QMainWindow, form_class):
             h = random.randrange(20, 450)
             qp.drawRect(w, h, 20, 20)
             self.planars.append([w+10, h+10])
+        self.planars.append(self.goalpt)
         self.draw_label.setPixmap(self.pix)
         qp.end()
 
     def drawND(self, snd, end):
         qp = QPainter(self.pix)
-        qp.setPen(QPen(Qt.red,  5))
+        qp.setPen(QPen(self.color,  5))
         qp.drawPoint(end[0],end[1])
-        qp.setPen(QPen(Qt.red,  2))
+        qp.setPen(QPen(self.color,  2))
         qp.drawLine(snd[0], snd[1], end[0], end[1])
         self.draw_label.setPixmap(self.pix)
         qp.end()
 
     def bt_mcts_clicked(self):
         print("Click MCTS button")
-        mcts = FunctionMCTS()
-        staND = self.startpt
-        endND = mcts.mcts(self.startpt, self.goalpt, self.planars[:])
-        self.drawND(staND, endND.pos)
+        self.draw_label.setPixmap(self.clean)
+        mcts = FunctionMCTS(self.value_mcts)
+        temp_start_pt = self.startpt
+        self.color = QColor(random.randrange(255),random.randrange(255),random.randrange(255))
+        while(1):
+            endND = mcts.mcts(temp_start_pt, self.goalpt, self.planars[:])
+            if endND == None:
+                print("Ooops!!!! I can't get there! Make another planars")
+                break
+            elif endND.pos == self.goalpt:
+                self.drawND(temp_start_pt, endND.pos)
+                print("Finally i came here!!!")
+                break
+            else:
+                self.drawND(temp_start_pt, endND.pos)
+                temp_start_pt = endND.pos
+
 
 ########Node class#############
 class node:
-    def __init__(self, pos, vis, val, utc, paND=None):
+    def __init__(self, pos=[0,0], vis=0, val=0, utc=0, paND=None):
         self.pos = pos
         self.vis = vis
         self.val = val
@@ -85,9 +96,9 @@ class node:
 
 #########MCTS Class############
 class FunctionMCTS:
-    def __init__(self):
+    def __init__(self, value_mcts):
         super().__init__()
-        self.iterations = 100
+        self.iterations = value_mcts
         self.limit_l = 150
 
     def mcts(self, spt, gpt, pts):
@@ -98,16 +109,6 @@ class FunctionMCTS:
             result = self.simulation(ex_node.pos, pts[:], gpt)
             self.backprop(result, ex_node)
         return self.finalSelect(root_nd)
-
-    def finalSelect(self, root_nd):
-        max = -1
-        max_nd = node
-        for i in range(len(root_nd.childNDs)):
-            exploitation = root_nd.childNDs[i].val / root_nd.childNDs[i].vis
-            if exploitation > max:
-                max_nd = root_nd.childNDs[i]
-                max = exploitation
-        return max_nd
 
     def find_candidate(self, nd, pts):
         for i in range(len(pts)):
@@ -122,9 +123,9 @@ class FunctionMCTS:
         if len(cnd.candiNDs) != 0:
             snd = cnd
         else:
-            max = -1
-            max_nd = node
-            for i in range(len(cnd.chNDs)):
+            max = -100
+            max_nd = node()
+            for i in range(len(cnd.childNDs)):
                 if cnd.childNDs[i].uct > max:
                     max_nd = cnd.childNDs[i]
                     max = max_nd.uct
@@ -171,6 +172,18 @@ class FunctionMCTS:
                 nd.val += 1
             self.backprop(result, nd.parentND)
             nd.uct = self.uctFunc(nd.val, nd.vis, nd.parentND.vis)
+
+    def finalSelect(self, root_nd):
+        max = -100
+        for i in range(len(root_nd.childNDs)):
+            exploitation = root_nd.childNDs[i].val / root_nd.childNDs[i].vis
+            if exploitation > max:
+                max_nd = root_nd.childNDs[i]
+                max = exploitation
+        if max == -100:
+            return None
+        else:
+            return max_nd
 
 
 if __name__ == '__main__':
