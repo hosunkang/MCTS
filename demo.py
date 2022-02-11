@@ -93,7 +93,6 @@ class MyWindow(QMainWindow, form_class):
                 temp_start_pt = endND.pos
         ts = time.time()-start
         self.label_time.setText("Time : {:0.4f}".format(ts))
-        
         item = QListWidgetItem("T:{:0.4f} P:{:3d} Iter:{:4d} R:{:3d} = {}".format(ts,
                                                                                   len(self.planars)-1,
                                                                                   self.value_mcts,
