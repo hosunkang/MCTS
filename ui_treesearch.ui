@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>CAMEL Tree Search</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>resource/icon.ico</normaloff>resource/icon.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
