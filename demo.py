@@ -1,5 +1,5 @@
 import sys, random, time
-from mcts import FunctionMCTS
+from mcts import *
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor
@@ -73,7 +73,7 @@ class MyWindow(QMainWindow, form_class):
     def bt_mcts_clicked(self):
         self.information.setText("Click MCTS button")
         self.draw_label.setPixmap(self.clean)
-        mcts = FunctionMCTS(self.value_mcts, self.value_mcts_2)
+        mcts = momentum_MCTS(self.value_mcts, self.value_mcts_2)
         temp_start_pt = self.startpt
         self.color = QColor(random.randrange(255),random.randrange(255),random.randrange(255))
         start = time.time()
