@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>CAMEL Tree Search</string>
+   <string>CAMEL Footstep planning</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -33,7 +33,7 @@
        <x>10</x>
        <y>510</y>
        <width>121</width>
-       <height>51</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -45,8 +45,8 @@
       <rect>
        <x>400</x>
        <y>510</y>
-       <width>111</width>
-       <height>51</height>
+       <width>121</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
@@ -88,7 +88,7 @@
     <widget class="QLabel" name="Nplanar">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>143</x>
        <y>510</y>
        <width>81</width>
        <height>17</height>
@@ -101,7 +101,7 @@
     <widget class="QSlider" name="slider_planar">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>143</x>
        <y>530</y>
        <width>231</width>
        <height>16</height>
@@ -169,7 +169,7 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>147</x>
+       <x>140</x>
        <y>545</y>
        <width>21</width>
        <height>17</height>
@@ -190,7 +190,7 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>363</x>
+       <x>356</x>
        <y>545</y>
        <width>21</width>
        <height>17</height>
@@ -253,7 +253,7 @@
     <widget class="QLabel" name="lbl_planar">
      <property name="geometry">
       <rect>
-       <x>310</x>
+       <x>303</x>
        <y>510</y>
        <width>67</width>
        <height>17</height>
@@ -463,6 +463,32 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QLabel" name="label_robot">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>540</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_mcts">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>540</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -474,8 +500,62 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menueee">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="load_pcd"/>
+   </widget>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>Setting</string>
+    </property>
+    <widget class="QMenu" name="menuRobot_type">
+     <property name="title">
+      <string>Robot type</string>
+     </property>
+     <addaction name="actionOnestep"/>
+     <addaction name="actionBipedal"/>
+     <addaction name="actionQuadrupedal"/>
+    </widget>
+    <widget class="QMenu" name="menuMCST_type">
+     <property name="title">
+      <string>MCST type</string>
+     </property>
+     <addaction name="actionStandard"/>
+    </widget>
+    <addaction name="menuRobot_type"/>
+    <addaction name="menuMCST_type"/>
+   </widget>
+   <addaction name="menueee"/>
+   <addaction name="menuSetting"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="load_pcd">
+   <property name="text">
+    <string>Load PCD file</string>
+   </property>
+  </action>
+  <action name="actionOnestep">
+   <property name="text">
+    <string>Onestep</string>
+   </property>
+  </action>
+  <action name="actionBipedal">
+   <property name="text">
+    <string>Bipedal</string>
+   </property>
+  </action>
+  <action name="actionQuadrupedal">
+   <property name="text">
+    <string>Quadrupedal</string>
+   </property>
+  </action>
+  <action name="actionStandard">
+   <property name="text">
+    <string>Standard</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

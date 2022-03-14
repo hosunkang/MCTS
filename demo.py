@@ -1,5 +1,6 @@
 import sys, random, time
 from mcts import *
+from pcutils import *
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap, QPainter, QPen, QColor
@@ -17,11 +18,19 @@ class MyWindow(QMainWindow, form_class):
         self.value_mcts = self.slider_mcts.value()
         self.value_mcts_2 = self.slider_mcts_2.value()
 
+        self.load_pcd.triggered.connect(self.pcd_file_opener)
+
         self.bt_draw_planar.clicked.connect(self.bt_draw_clicked)
         self.bt_mcts.clicked.connect(self.bt_mcts_clicked)
         self.slider_planar.valueChanged.connect(self.planar_changed)
         self.slider_mcts.valueChanged.connect(self.mcts_changed)
         self.slider_mcts_2.valueChanged.connect(self.mcts_2_changed)
+
+    def pcd_file_opener(self):
+        filename = QFileDialog.getOpenFileName(self, "Open PCD file", './')
+        filename = filename[0]
+        pcu = pcdutils()
+        pcu.get_pcd_2d(filename)
 
     def planar_changed(self):
         self.value_planar = self.slider_planar.value()
@@ -37,12 +46,13 @@ class MyWindow(QMainWindow, form_class):
 
     def bt_draw_clicked(self):
         self.information.setText("Click Draw planar button")
-        self.startpt = (10,250)
-        self.goalpt = (1000,250)
-        self.planars = []
+        simul_version = self.comboBox_1.currentIndex()
         self.pix = QPixmap(self.draw_label.size())
         self.pix.fill(Qt.transparent)
         qp = QPainter(self.pix)
+
+        self.startpt = (10,250)
+        self.goalpt = (1000,250)
 
         # Start
         qp.setBrush(Qt.green)
@@ -51,6 +61,7 @@ class MyWindow(QMainWindow, form_class):
         qp.setBrush(Qt.red)
         qp.drawRect(self.goalpt[0]-10, self.goalpt[1]-10, 20, 20)
 
+        self.planars = []
         qp.setBrush(Qt.SolidPattern)
         for i in range(self.value_planar):
             w = random.randrange(20, 980)

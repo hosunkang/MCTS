@@ -49,7 +49,7 @@ class standard_MCTS:
                 self.backprop(result, ex_node)
         else:
             print("Iteration is done")
-            final_node = self.finalSelect(root_nd, gpt)
+            final_node = self.finalSelect(root_nd)
             return final_node
 
     # input (center node, other points)
@@ -262,9 +262,6 @@ class momentum_MCTS:
 
     def finalSelect(self, root_nd, gp):
         max = -100
-        # print([root_nd.childNDs[i].vis for i in range(len(root_nd.childNDs))])
-        # print([root_nd.childNDs[i].val for i in range(len(root_nd.childNDs))])
-        # print([root_nd.childNDs[i].utc for i in range(len(root_nd.childNDs))])
         # print('\n')
         for i in range(len(root_nd.childNDs)):
             _, dist = self.get_dist(root_nd.childNDs[i].pos, gp)
