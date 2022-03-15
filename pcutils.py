@@ -7,14 +7,15 @@ class pcdutils:
         super().__init__()
     def openpcd(self, name):
         pcd = o3d.io.read_point_cloud(name)
-        return pcd
+        downpcd = pcd.voxel_down_sample(voxel_size=0.1)
+        return downpcd
     def get_pcd_2d(self, name):
         pcd = self.openpcd(name)
         pts = np.asanyarray(pcd.points)
-        pts_2d_x = [x for x,y,z in pts]
-        pts_2d_y = [x for x,y,z in pts]
-        pts_2d = [[x,y] for x,y,z in pts]
+        pts_2d = [[x,z] for x,y,z in pts if y<0.47]
         scaler = MinMaxScaler()
         pts_2d = scaler.fit_transform(pts_2d)
-        pts_2d = [[int(x*1000), int(y*500)] for x,y in pts_2d]
-        print(pts_2d)
+        pts_2d = [[int(w*900+100), int(h*400+50)] for h,w in pts_2d]
+
+        return pts_2d
+

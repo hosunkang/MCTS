@@ -27,23 +27,23 @@
       <height>601</height>
      </rect>
     </property>
-    <widget class="QPushButton" name="bt_draw_planar">
+    <widget class="QPushButton" name="cleaner">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>510</y>
+       <x>140</x>
+       <y>544</y>
        <width>121</width>
-       <height>31</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>Draw planar</string>
+      <string>Clear</string>
      </property>
     </widget>
     <widget class="QPushButton" name="bt_mcts">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>140</x>
        <y>510</y>
        <width>121</width>
        <height>31</height>
@@ -56,7 +56,7 @@
     <widget class="QLabel" name="Iterations">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>270</x>
        <y>510</y>
        <width>81</width>
        <height>17</height>
@@ -71,8 +71,8 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>1021</width>
-       <height>501</height>
+       <width>1005</width>
+       <height>500</height>
       </rect>
      </property>
      <property name="cursor">
@@ -85,54 +85,10 @@
       <string/>
      </property>
     </widget>
-    <widget class="QLabel" name="Nplanar">
-     <property name="geometry">
-      <rect>
-       <x>143</x>
-       <y>510</y>
-       <width>81</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>N. of planar</string>
-     </property>
-    </widget>
-    <widget class="QSlider" name="slider_planar">
-     <property name="geometry">
-      <rect>
-       <x>143</x>
-       <y>530</y>
-       <width>231</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="minimum">
-      <number>50</number>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TicksBelow</enum>
-     </property>
-     <property name="tickInterval">
-      <number>10</number>
-     </property>
-    </widget>
     <widget class="QSlider" name="slider_mcts">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>270</x>
        <y>530</y>
        <width>231</width>
        <height>16</height>
@@ -153,6 +109,9 @@
      <property name="pageStep">
       <number>100</number>
      </property>
+     <property name="value">
+      <number>300</number>
+     </property>
      <property name="tracking">
       <bool>true</bool>
      </property>
@@ -166,52 +125,10 @@
       <number>100</number>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>545</y>
-       <width>21</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>50</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>356</x>
-       <y>545</y>
-       <width>21</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>100</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>526</x>
+       <x>266</x>
        <y>545</y>
        <width>21</width>
        <height>17</height>
@@ -232,7 +149,7 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>737</x>
+       <x>477</x>
        <y>545</y>
        <width>31</width>
        <height>17</height>
@@ -250,26 +167,10 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="lbl_planar">
-     <property name="geometry">
-      <rect>
-       <x>303</x>
-       <y>510</y>
-       <width>67</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>50</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
     <widget class="QLabel" name="lbl_mcts">
      <property name="geometry">
       <rect>
-       <x>690</x>
+       <x>430</x>
        <y>510</y>
        <width>67</width>
        <height>17</height>
@@ -282,46 +183,10 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label_time">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>570</y>
-       <width>181</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Time : </string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="information">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>570</y>
-       <width>621</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>information</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>776</x>
+       <x>516</x>
        <y>545</y>
        <width>21</width>
        <height>17</height>
@@ -342,7 +207,7 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>987</x>
+       <x>727</x>
        <y>545</y>
        <width>31</width>
        <height>17</height>
@@ -363,7 +228,7 @@
     <widget class="QLabel" name="Iterations_2">
      <property name="geometry">
       <rect>
-       <x>780</x>
+       <x>520</x>
        <y>510</y>
        <width>81</width>
        <height>17</height>
@@ -376,7 +241,7 @@
     <widget class="QSlider" name="slider_mcts_2">
      <property name="geometry">
       <rect>
-       <x>780</x>
+       <x>520</x>
        <y>530</y>
        <width>231</width>
        <height>16</height>
@@ -398,7 +263,7 @@
       <number>50</number>
      </property>
      <property name="value">
-      <number>50</number>
+      <number>100</number>
      </property>
      <property name="tracking">
       <bool>true</bool>
@@ -416,7 +281,7 @@
     <widget class="QLabel" name="lbl_mcts_2">
      <property name="geometry">
       <rect>
-       <x>940</x>
+       <x>680</x>
        <y>510</y>
        <width>67</width>
        <height>17</height>
@@ -432,9 +297,9 @@
     <widget class="QListWidget" name="listWidget">
      <property name="geometry">
       <rect>
-       <x>1030</x>
+       <x>1010</x>
        <y>30</y>
-       <width>271</width>
+       <width>291</width>
        <height>571</height>
       </rect>
      </property>
@@ -445,7 +310,7 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>1138</x>
+       <x>1122</x>
        <y>10</y>
        <width>67</width>
        <height>17</height>
@@ -463,31 +328,45 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label_robot">
+    <widget class="QComboBox" name="robot_type">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>510</y>
+       <width>121</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Bipedal</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Quadrupedal</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="mcts_type">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>540</y>
        <width>121</width>
-       <height>17</height>
+       <height>25</height>
       </rect>
      </property>
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_mcts">
-     <property name="geometry">
-      <rect>
-       <x>400</x>
-       <y>540</y>
-       <width>121</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
+     <item>
+      <property name="text">
+       <string>Standard</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Momentum</string>
+      </property>
+     </item>
     </widget>
    </widget>
   </widget>
@@ -500,35 +379,13 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menueee">
+   <widget class="QMenu" name="file_menu">
     <property name="title">
      <string>File</string>
     </property>
     <addaction name="load_pcd"/>
    </widget>
-   <widget class="QMenu" name="menuSetting">
-    <property name="title">
-     <string>Setting</string>
-    </property>
-    <widget class="QMenu" name="menuRobot_type">
-     <property name="title">
-      <string>Robot type</string>
-     </property>
-     <addaction name="actionOnestep"/>
-     <addaction name="actionBipedal"/>
-     <addaction name="actionQuadrupedal"/>
-    </widget>
-    <widget class="QMenu" name="menuMCST_type">
-     <property name="title">
-      <string>MCST type</string>
-     </property>
-     <addaction name="actionStandard"/>
-    </widget>
-    <addaction name="menuRobot_type"/>
-    <addaction name="menuMCST_type"/>
-   </widget>
-   <addaction name="menueee"/>
-   <addaction name="menuSetting"/>
+   <addaction name="file_menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="load_pcd">
