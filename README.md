@@ -1,4 +1,6 @@
 # MCTS
 
-python3
-pyqt5
+## Requirement
+python3, pyqt5
+
+## Usage
