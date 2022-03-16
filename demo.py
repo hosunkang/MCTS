@@ -17,7 +17,7 @@ class MyWindow(QMainWindow, form_class):
         self.start_pts = [[(50,225),(50,275)],
                           [(80,230),(20,230),(80,270),(20,270)]]
         self.goal_area = (900,200,100,100)
-    
+
         # Initial values setting
         self.value_mcts = self.slider_mcts.value()
         self.value_mcts_2 = self.slider_mcts_2.value()

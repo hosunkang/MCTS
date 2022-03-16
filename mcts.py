@@ -5,11 +5,12 @@ import random, math
 # candiNDs = The nodes can be selected in policy
 # childNDs = Already Expanded nodes, so, it has UTC value
 class node:
-    def __init__(self, pos=[0,0], vis=0, val=0, utc=0.0, paND=None):
+    def __init__(self, pos=[0,0], vis=0, val=0, utc=0.0, leg=None, paND=None):
         self.pos = pos
         self.vis = vis
         self.val = val
         self.utc = utc
+        self.leg_num = leg
         self.parentND = paND
         self.childNDs = []
         self.candiNDs = []
@@ -18,7 +19,7 @@ class node:
 class standard_MCTS:
     def __init__(self, value_mcts, value_mcts_2):
         super().__init__()
-        self.iterations = value_mcts
+        self.iterations = 10
         self.limit_l = value_mcts_2
 
     def get_dist(self, pt1, pt2):
@@ -26,13 +27,40 @@ class standard_MCTS:
         y = pt2[1] - pt1[1]
         d = math.sqrt((x*x)+(y*y))
         return x,d
+    def get_rootNode(self, spts):
+        x_sum = 0
+        y_sum = 0
+        for x,y in spts:
+            x_sum += x
+            y_sum += y
+        else:
+            pos = [x_sum/len(spts),y_sum/len(spts)]
+            nd = node(pos, 0, 0, 0.0, None, None)
+        return nd
 
     # selection -> expansion -> simulation -> backpropagation -> final selection
     def mcts(self, spts, garea, pts, robot):
+        rootND = self.get_rootNode(spts)
+        print(rootND.pos)
         for i in range(self.iterations):
-            self.selection()
-            
-    def selection(self):
+            self.selection(rootND, pts, robot)
+    
+    def find_candi(self, nd, pts):
+        for i in range(len(pts)):
+            x = pts[i][0] - nd.pos[0]
+            y = pts[i][1] - nd.pos[1]
+            l = math.sqrt((x*x)+(y*y))
+
+            # policy 1 : Distance between two points are in workspace of each legs
+            # policy 2 : Forward points should be selected
+            if l < self.limit_l and x > 0:
+                nd.candiNDs.append(node(pts[i], 0, 0, 0.0, nd))
+        return nd
+
+    def selection(self, rnd, pts, robot):
+        rnd = self.find_candidate(rnd, pts)
+        print(rnd.candiNDs)
+
 
 
 class momentum_MCTS:
