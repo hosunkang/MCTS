@@ -1,3 +1,4 @@
+from fcntl import DN_DELETE
 from logging import root
 import random, math
 
@@ -10,7 +11,7 @@ class node:
         self.vis = vis
         self.val = val
         self.utc = utc
-        self.leg_num = leg
+        self.leg = leg
         self.parentND = paND
         self.childNDs = []
         self.candiNDs = []
@@ -27,25 +28,20 @@ class standard_MCTS:
         y = pt2[1] - pt1[1]
         d = math.sqrt((x*x)+(y*y))
         return x,d
-    def get_rootNode(self, spts):
+    def get_rootND(self, spts):
+        nd = node()
         x_sum = 0
         y_sum = 0
-        for x,y in spts:
-            x_sum += x
-            y_sum += y
+        for idx,pos in enumerate(spts):
+            x_sum += pos[0]
+            y_sum += pos[1]
+            nd.childNDs.append(node(pos=pos,leg=idx,paND=nd))
         else:
             pos = [x_sum/len(spts),y_sum/len(spts)]
-            nd = node(pos, 0, 0, 0.0, None, None)
+            nd.pos = pos
         return nd
 
-    # selection -> expansion -> simulation -> backpropagation -> final selection
-    def mcts(self, spts, garea, pts, robot):
-        rootND = self.get_rootNode(spts)
-        print(rootND.pos)
-        for i in range(self.iterations):
-            self.selection(rootND, pts, robot)
-    
-    def find_candi(self, nd, pts):
+    def get_candiND(self, nd, pts):
         for i in range(len(pts)):
             x = pts[i][0] - nd.pos[0]
             y = pts[i][1] - nd.pos[1]
@@ -57,10 +53,22 @@ class standard_MCTS:
                 nd.candiNDs.append(node(pts[i], 0, 0, 0.0, nd))
         return nd
 
-    def selection(self, rnd, pts, robot):
-        rnd = self.find_candidate(rnd, pts)
-        print(rnd.candiNDs)
+    # selection -> expansion -> simulation -> backpropagation -> final selection
+    def mcts(self, spts, garea, pts):
+        rootND = self.get_rootND(spts)
+        for nd in rootND.childNDs:
+            print(nd.pos, nd.leg, nd.parentND)
+        for i in range(self.iterations):
+            selectND = self.selection(rootND, pts, rootFlag=0) 
 
+    def selection(self, rnd, pts, rootFlag):
+        for legND in rnd.childNDs:
+            legND = self.get_candiND(legND, pts)
+            
+
+        
+            
+            
 
 
 class momentum_MCTS:

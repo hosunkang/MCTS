@@ -87,7 +87,7 @@ class MyWindow(QMainWindow, form_class):
     
     def bt_mcts_clicked(self):
         mcts = standard_MCTS(self.value_mcts, self.value_mcts_2)  
-        NDs = mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts, self.robot_type_idx)
+        NDs = mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
         # self.drawND(temp_start_pts, NDs)
 
     # def bt_mcts_clicked(self):
