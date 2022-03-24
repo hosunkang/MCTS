@@ -72,13 +72,11 @@ class MyWindow(QMainWindow, form_class):
         self.draw_label.setPixmap(self.pix)
         qp.end()
 
-    def drawND(self, snd, end):
+    def drawND(self, pos):
         qp = QPainter(self.pix)
         color = QColor(random.randrange(255),random.randrange(255),random.randrange(255))
-        qp.setPen(QPen(color,  5))
-        qp.drawPoint(end[0],end[1])
-        qp.setPen(QPen(color,  2))
-        qp.drawLine(snd[0], snd[1], end[0], end[1])
+        qp.setPen(QPen(Qt.red,  5))
+        qp.drawPoint(pos[0],pos[1])
         self.draw_label.setPixmap(self.pix)
         qp.end()
     
@@ -113,18 +111,10 @@ class MyWindow(QMainWindow, form_class):
     def cleaner_clicked(self):
         self.pix.fill(Qt.transparent)
         self.draw_pts()
-
-    def get_rootND(self, spts):
-        nd = node()
-        for idx,pos in enumerate(spts):
-            nd.childNDs.append(node(pos=pos,leg=idx, vis=1, paND=nd))
-        nd.pos = self.get_robotCenter(spts)  
-        return nd
-
+    
     def bt_mcts_clicked(self):
-        mcts = standard_MCTS(self, self.value_mcts, self.value_mcts_2)
-        rootND = self.get_rootND(self.start_pts[self.robot_type_idx])
-        rootND = mcts.mcts(rootND, self.goal_area, self.pts)
+        mcts = standard_MCTS(self, self.value_mcts, self.value_mcts_2)  
+        mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
         # self.drawND(temp_start_pts, NDs)
 
     # def bt_mcts_clicked(self):

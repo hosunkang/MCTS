@@ -1,7 +1,3 @@
-from fcntl import DN_DELETE
-from logging import root
-
-from matplotlib.pyplot import flag
 from demo import MyWindow
 import random, math
 
@@ -9,12 +5,11 @@ import random, math
 # candiNDs = The nodes can be selected in policy
 # childNDs = Already Expanded nodes, so, it has UTC value
 class node:
-    def __init__(self, pos=[0,0], vis=0, val=0, utc=0.0, leg=None, paND=None):
+    def __init__(self, pos=[0,0], vis=0, val=0, utc=0.0, paND=None):
         self.pos = pos
         self.vis = vis
         self.val = val
         self.utc = utc
-        self.leg = leg
         self.parentND = paND
         self.childNDs = []
         self.candiNDs = []
@@ -23,9 +18,11 @@ class node:
 class standard_MCTS:
     def __init__(self, window, value_mcts, value_mcts_2):
         super().__init__()
-        self.iterations = 100
-        self.limit_l = value_mcts_2
+        self.iterations = value_mcts
+        self.stepLimit = value_mcts_2
+        self.Min_robotWidth, self.Max_robotWidth = 80, 150
         self.window = window
+        self.stepLeg = 0
 
     def get_dist(self, pt1, pt2):
         x = pt2[0] - pt1[0]
@@ -44,20 +41,21 @@ class standard_MCTS:
         return center
 
     def get_rootND(self, spts):
-        nd = node()
+        ## Root node == first step leg (0 -> max)
+        nd = node(spts[self.stepLeg]) 
         for idx,pos in enumerate(spts):
-            nd.childNDs.append(node(pos=pos,leg=idx, vis=1, paND=nd))
-        nd.pos = self.get_robotCenter(spts)  
+            if idx != self.stepLeg:
+                nd.childNDs.append(node(pos=pos, vis=1, paND=nd))
         return nd
 
     def get_candiND(self, nd, pts):
         for pt in pts:
-            x, l = self.get_dist(nd.pos, pt)
+            x_1, width = self.get_dist(nd.pos, pt)
+            x_2, step = self.get_dist(nd.parentND.pos, pt)
 
-            # policy 1 : Distance between two points are in workspace of each legs
-            # policy 2 : Forward points should be selected
-            if l < self.limit_l and x > 0:
-                nd.candiNDs.append(node(pos=pt,leg=nd.leg, paND=nd))
+            if step < self.stepLimit and x_2 > 0:
+                if self.Min_robotWidth < width < self.Max_robotWidth:
+                    nd.candiNDs.append(node(pos=pt, paND=nd))
         return nd
 
     def check_goal(self, pt, goal):
@@ -68,25 +66,6 @@ class standard_MCTS:
             return 1    
         else:
             return 0
-        
-    def findSimulPts(self, legs, pts):
-        simulpts = []
-        for idx,leg in enumerate(legs):
-            temp = []
-            for pt in pts:
-                x,l = self.get_dist(leg,pt)
-
-                # policy 1 : Distance between two points are in workspace of each legs
-                # policy 2 : Forward points should be selected
-                if l<self.limit_l and x>0:
-                    templeg = legs[:]
-                    templeg[idx] = pt
-                    tempcenter = self.get_robotCenter(templeg)
-                    _,d = self.get_dist(tempcenter, pt)
-                    if d < self.limit_l:
-                        temp.append(pt)
-            simulpts.append(temp)
-        return simulpts
 
     # UTC value function
     # w: N. of win , n: N. of visit in child node, t: N. of visit in parent node
@@ -96,38 +75,47 @@ class standard_MCTS:
             return float((w/n)+math.sqrt(2*math.log(t)/n))
         else:
             return 0
+
     def printND(self, nd):
-        print(nd.pos, nd.vis, nd.val, nd.utc, nd.leg, len(nd.childNDs))
+        print(nd.pos, nd.vis, nd.val, nd.utc, len(nd.childNDs))
 
     # selection -> expansion -> simulation -> backpropagation -> final selection
     def mcts(self, spts, garea, pts):
         rootND = self.get_rootND(spts)
-        for i in range(self.iterations):
-            seleND = self.selection(rootND, pts)
-            expaND = self.expansion(seleND)
-            result = self.simulation(expaND, rootND, pts, garea)
-            self.backprop(result, expaND)
-        else:
-            print("Iteration is done")
-            self.finalSelect(rootND)
-            return rootND
+        seleND = self.selection(rootND, pts)
+        # for nd in seleND.candiNDs:
+        #     self.window.drawND(nd.pos)
+        expaND = self.expansion(seleND)
+        result = self.simulation(expaND, rootND, pts, garea)
+        # self.window.drawND(expaND.pos)
+        # print("Before : ", self.stepLeg, rootND.childNDs[self.stepLeg])
+        # for i in range(self.iterations):
+        #     seleND = self.selection(rootND, pts)
+        #     expaND = self.expansion(seleND)
+        #     result = self.simulation(expaND, rootND, pts, garea)
+        #     self.backprop(result, expaND)
+        # else:
+        #     self.finalSelect(rootND)
+        #     print("After : ", self.stepLeg, rootND.childNDs[self.stepLeg])
+        #     self.window.drawRobot(rootND)
+        #     self.stepLeg = (self.stepLeg +1)//len(spts)
 
     def selection(self, nd, pts):
         if len(nd.candiNDs) == 0 and len(nd.childNDs) == 0:
             nd = self.get_candiND(nd, pts)
-        
+
         if len(nd.candiNDs) == 0 and len(nd.childNDs) != 0:
             max = -100
-            max_nd = node()
+            temp_nd = node()
             for i in range(len(nd.childNDs)):
                 if nd.childNDs[i].utc > max:
-                    max_nd = nd.childNDs[i]
-                    max = max_nd.utc
-            snd = self.selection(max_nd, pts)
+                    temp_nd = nd.childNDs[i]
+                    max = nd.childNDs[i].utc
+            snd = self.selection(temp_nd, pts)
         else:
             snd = nd
         return snd
-        
+    
     def expansion(self, nd):
         end = nd.candiNDs[random.randrange(len(nd.candiNDs))]
         nd.childNDs.append(end)
@@ -162,34 +150,7 @@ class standard_MCTS:
                             break
                         else:
                             idx = idxtemp
-
-    def backprop(self, result, nd):
-        nd.vis += 1
-        if result == 1:
-            nd.val += 1
-        if nd.parentND is not None:
-            self.backprop(result, nd.parentND)
-            for child in nd.parentND.childNDs:
-                child.utc = self.utcFunc(child)
     
-    def finalSelect(self, rnd):
-        max = -100
-        maxLeg = 0
-        for subrtND in rnd.childNDs:
-            if max < subrtND.utc:
-                max = subrtND.utc
-                maxLeg = subrtND.leg
-        max = -100
-        maxidx = -100
-        for idx, childND in enumerate(rnd.childNDs[maxLeg].childNDs):
-            if max < childND.utc:
-                max = childND.utc
-                maxidx = idx
-        rnd.childNDs[maxLeg] = childND
-        legs = [n.pos for n in rnd.childNDs]
-        rnd.pos = self.get_robotCenter(legs)
-        
-            
 class momentum_MCTS:
     def __init__(self, value_mcts, value_mcts_2):
         super().__init__()
