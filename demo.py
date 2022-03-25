@@ -1,4 +1,6 @@
 import sys, random, time
+
+from matplotlib.cbook import pts_to_midstep
 from mcts import *
 from pcutils import *
 from PyQt5.QtWidgets import *
@@ -72,29 +74,15 @@ class MyWindow(QMainWindow, form_class):
         self.draw_label.setPixmap(self.pix)
         qp.end()
 
-    def drawND(self, pos):
+    def drawPT(self, pos):
         qp = QPainter(self.pix)
         color = QColor(random.randrange(255),random.randrange(255),random.randrange(255))
         qp.setPen(QPen(Qt.red,  5))
         qp.drawPoint(pos[0],pos[1])
         self.draw_label.setPixmap(self.pix)
         qp.end()
-    
-    def drawRobot(self,legs,center):
-        qp = QPainter(self.pix)
-        color = QColor(random.randrange(125,255),random.randrange(125,255),random.randrange(125,255))
-        qp.setPen(QPen(color,  2))
-        for leg in legs:
-            qp.drawLine(leg[0], leg[1], center[0], center[1])
-        qp.setPen(QPen(color,  5))
-        for leg in legs:
-            qp.drawPoint(leg[0],leg[1])
-        qp.setPen(QPen(Qt.red,  5))
-        qp.drawPoint(center[0],center[1])
-        self.draw_label.setPixmap(self.pix)
-        qp.end()
 
-    def drawRobot(self,nd):
+    def drawRobotND(self,nd):
         qp = QPainter(self.pix)
         color = QColor(random.randrange(125,255),random.randrange(125,255),random.randrange(125,255))
         qp.setPen(QPen(Qt.blue,  2))
@@ -107,6 +95,20 @@ class MyWindow(QMainWindow, form_class):
         qp.drawPoint(nd.pos[0],nd.pos[1])
         self.draw_label.setPixmap(self.pix)
         qp.end()
+        QApplication.processEvents()
+
+    def drawRobotPT(self, pts):
+        qp = QPainter(self.pix)
+        color = QColor(random.randrange(125,255),random.randrange(125,255),random.randrange(125,255))
+        qp.setPen(QPen(Qt.blue,  2))
+        qp.drawLine(pts[0][0], pts[0][1], pts[1][0], pts[1][1])
+        qp.setPen(QPen(Qt.blue,  5))
+        for leg in pts:
+            qp.drawPoint(leg[0],leg[1])
+        self.draw_label.setPixmap(self.pix)
+        qp.end()
+        QApplication.processEvents()
+
     
     def cleaner_clicked(self):
         self.pix.fill(Qt.transparent)

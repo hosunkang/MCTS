@@ -177,7 +177,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>100</string>
+      <string>200</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -198,7 +198,7 @@
       </font>
      </property>
      <property name="text">
-      <string>50</string>
+      <string>1</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -219,7 +219,7 @@
       </font>
      </property>
      <property name="text">
-      <string>300</string>
+      <string>20</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -235,7 +235,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Step radius</string>
+      <string>Step count</string>
      </property>
     </widget>
     <widget class="QSlider" name="slider_mcts_2">
@@ -251,19 +251,19 @@
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="minimum">
-      <number>50</number>
+      <number>1</number>
      </property>
      <property name="maximum">
-      <number>300</number>
+      <number>20</number>
      </property>
      <property name="singleStep">
-      <number>50</number>
+      <number>1</number>
      </property>
      <property name="pageStep">
-      <number>50</number>
+      <number>1</number>
      </property>
      <property name="value">
-      <number>100</number>
+      <number>1</number>
      </property>
      <property name="tracking">
       <bool>true</bool>
@@ -275,7 +275,7 @@
       <enum>QSlider::TicksBelow</enum>
      </property>
      <property name="tickInterval">
-      <number>50</number>
+      <number>1</number>
      </property>
     </widget>
     <widget class="QLabel" name="lbl_mcts_2">
@@ -288,7 +288,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>50</string>
+      <string>1</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
