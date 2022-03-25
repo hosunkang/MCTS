@@ -294,19 +294,6 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QListWidget" name="listWidget">
-     <property name="geometry">
-      <rect>
-       <x>1010</x>
-       <y>30</y>
-       <width>291</width>
-       <height>571</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
@@ -367,6 +354,21 @@
        <string>Momentum</string>
       </property>
      </item>
+    </widget>
+    <widget class="QTreeWidget" name="treeWidget">
+     <property name="geometry">
+      <rect>
+       <x>1010</x>
+       <y>30</y>
+       <width>291</width>
+       <height>561</height>
+      </rect>
+     </property>
+     <column>
+      <property name="text">
+       <string>Nodes</string>
+      </property>
+     </column>
     </widget>
    </widget>
   </widget>

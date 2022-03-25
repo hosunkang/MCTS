@@ -116,8 +116,17 @@ class MyWindow(QMainWindow, form_class):
     
     def bt_mcts_clicked(self):
         mcts = standard_MCTS(self, self.value_mcts, self.value_mcts_2)  
-        mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
-        # self.drawND(temp_start_pts, NDs)
+        nds = mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
+
+        for idx, nd in enumerate(nds):
+            topitem = QTreeWidgetItem()
+            topitem.setText(0, "node{}".format(idx+1))
+            self.treeWidget.addTopLevelItem(topitem)
+            childitem = QTreeWidgetItem(topitem, ["Info"])
+            for cidx, cnd in enumerate(nd.childNDs):
+                childitem.setText(cidx, "childND{}".format(cidx+1))
+                
+        
 
     # def bt_mcts_clicked(self):
     #     mcts = momentum_MCTS(self.value_mcts, self.value_mcts_2)  

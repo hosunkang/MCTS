@@ -1,7 +1,3 @@
-import re
-from shutil import move
-from matplotlib.pyplot import step
-from pyrsistent import PTypeError
 from demo import MyWindow
 import random, math
 
@@ -98,6 +94,7 @@ class standard_MCTS:
 
     # selection -> expansion -> simulation -> backpropagation -> final selection
     def mcts(self, spts, garea, pts):
+        finalNDs = []
         rootND = self.get_rootND(spts)
         for j in range(self.stepCount):
             for i in range(self.iterations):
@@ -106,7 +103,7 @@ class standard_MCTS:
                 result = self.simulation(expaND, pts, garea)
                 self.backprop(result, expaND)
             else:
-                print("#{} Iteration is done".format(j))
+                print("#{} Iteration is done".format(j+1))
                 rootND = self.finalSelect(rootND)
                 self.window.drawRobotND(rootND)
 
@@ -116,6 +113,8 @@ class standard_MCTS:
                     legs.append(nd.pos)
                 if self.check_goal(self.get_robotCenter(legs),garea) == 1:
                     break
+            finalNDs.append(rootND)
+        return finalNDs
 
     def selection(self, nd, pts):
         if len(nd.candiNDs) == 0 and len(nd.childNDs) == 0:
