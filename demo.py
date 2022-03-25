@@ -108,50 +108,32 @@ class MyWindow(QMainWindow, form_class):
         self.draw_label.setPixmap(self.pix)
         qp.end()
         QApplication.processEvents()
-
     
     def cleaner_clicked(self):
         self.pix.fill(Qt.transparent)
         self.draw_pts()
     
+    def addNDinfo(self, top, nd):
+        QTreeWidgetItem(top, ["pos", str(nd.pos)])
+        QTreeWidgetItem(top, ["vis", str(nd.vis)])
+        QTreeWidgetItem(top, ["val", str(nd.val)])
+        QTreeWidgetItem(top, ["UTC", "{:.4f}".format(nd.utc)])
+
     def bt_mcts_clicked(self):
+        self.treeWidget.clear()
         mcts = standard_MCTS(self, self.value_mcts, self.value_mcts_2)  
-        nds = mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
+        nds, maxNDs = mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
 
-        for idx, nd in enumerate(nds):
+        for idx, (nd, max) in enumerate(zip(nds,maxNDs)):
             topitem = QTreeWidgetItem()
-            topitem.setText(0, "node{}".format(idx+1))
+            topitem.setText(0, "#{} step".format(idx+1))
             self.treeWidget.addTopLevelItem(topitem)
-            childitem = QTreeWidgetItem(topitem, ["Info"])
+            childitem = QTreeWidgetItem(topitem, ["Select Node"])
+            self.addNDinfo(childitem, max)
             for cidx, cnd in enumerate(nd.childNDs):
-                childitem.setText(cidx, "childND{}".format(cidx+1))
-                
-        
-
-    # def bt_mcts_clicked(self):
-    #     mcts = momentum_MCTS(self.value_mcts, self.value_mcts_2)  
-    #     temp_start_pt = self.start_pts[self.robot_type_idx]
-    #     start = time.time()
-    #     while(1):
-    #         endND = mcts.mcts(temp_start_pt, self.goal_area, self.planars[:])
-    #         if endND == None:
-    #             self.drawND(temp_start_pt, temp_start_pt)
-    #             result = "Fail"
-    #             break
-    #         elif endND.pos == self.goal_area:
-    #             self.drawND(temp_start_pt, endND.pos)
-    #             result = "Good"
-    #             break
-    #         else:
-    #             self.drawND(temp_start_pt, endND.pos)
-    #             temp_start_pt = endND.pos
-    #     ts = time.time()-start
-    #     item = QListWidgetItem("T:{:0.4f} P:{:3d} Iter:{:4d} R:{:3d} = {}".format(ts,
-    #                                                                               len(self.planars)-1,
-    #                                                                               self.value_mcts,
-    #                                                                               self.value_mcts_2,
-    #                                                                               result))
-    #     self.listWidget.addItem(item)
+                childitem = QTreeWidgetItem(topitem)
+                childitem.setText(0, "#{} child Node".format(cidx+1))
+                self.addNDinfo(childitem, cnd)
 
 if __name__ == '__main__':
    app = QApplication(sys.argv)

@@ -1,3 +1,4 @@
+from typing import final
 from demo import MyWindow
 import random, math
 
@@ -95,6 +96,7 @@ class standard_MCTS:
     # selection -> expansion -> simulation -> backpropagation -> final selection
     def mcts(self, spts, garea, pts):
         finalNDs = []
+        maxNDs = []
         rootND = self.get_rootND(spts)
         for j in range(self.stepCount):
             for i in range(self.iterations):
@@ -104,7 +106,11 @@ class standard_MCTS:
                 self.backprop(result, expaND)
             else:
                 print("#{} Iteration is done".format(j+1))
-                rootND = self.finalSelect(rootND)
+                spts, maxND = self.finalSelect(rootND)
+                finalNDs.append(rootND.childNDs[0])
+                maxNDs.append(maxND)
+
+                rootND = self.get_rootND(spts)
                 self.window.drawRobotND(rootND)
 
                 ## Check goal
@@ -113,8 +119,8 @@ class standard_MCTS:
                     legs.append(nd.pos)
                 if self.check_goal(self.get_robotCenter(legs),garea) == 1:
                     break
-            finalNDs.append(rootND)
-        return finalNDs
+        
+        return finalNDs, maxNDs
 
     def selection(self, nd, pts):
         if len(nd.candiNDs) == 0 and len(nd.childNDs) == 0:
@@ -182,10 +188,4 @@ class standard_MCTS:
             if max < nd.utc:
                 max = nd.utc
                 maxND = nd
-        return self.get_rootND([rnd.childNDs[0].pos, maxND.pos])
-        
-        
-
-
-
-                
+        return [rnd.childNDs[0].pos, maxND.pos], maxND
