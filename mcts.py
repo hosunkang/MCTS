@@ -1,6 +1,6 @@
-from typing import final
 from demo import MyWindow
 import random, math
+import time
 
 ########Node class#############
 # candiNDs = The nodes can be selected in policy
@@ -99,14 +99,17 @@ class standard_MCTS:
         maxNDs = []
         rootND = self.get_rootND(spts)
         for j in range(self.stepCount):
+            start = time.time()
             for i in range(self.iterations):
                 seleND = self.selection(rootND, pts)
                 expaND = self.expansion(seleND)
                 result = self.simulation(expaND, pts, garea)
                 self.backprop(result, expaND)
             else:
-                print("#{} Iteration is done".format(j+1))
                 spts, maxND = self.finalSelect(rootND)
+                ts = time.time()-start
+                print("#{} Iteration is done : {} s".format(j+1, ts))
+    
                 finalNDs.append(rootND.childNDs[0])
                 maxNDs.append(maxND)
 

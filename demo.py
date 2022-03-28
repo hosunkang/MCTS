@@ -1,6 +1,5 @@
 import sys, random, time
 
-from matplotlib.cbook import pts_to_midstep
 from mcts import *
 from pcutils import *
 from PyQt5.QtWidgets import *
@@ -122,7 +121,10 @@ class MyWindow(QMainWindow, form_class):
     def bt_mcts_clicked(self):
         self.treeWidget.clear()
         mcts = standard_MCTS(self, self.value_mcts, self.value_mcts_2)  
+        start = time.time()
         nds, maxNDs = mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
+        ts = time.time()-start
+        print(ts)
 
         for idx, (nd, max) in enumerate(zip(nds,maxNDs)):
             topitem = QTreeWidgetItem()
