@@ -17,7 +17,6 @@ class MyWindow(QMainWindow, form_class):
         self.pts = None
         self.start_pts = [[(50,200),(50,300)],
                           [(80,230),(20,230),(80,270),(20,270)]]
-        self.goal_area = (900,200,100,100)
 
         # Initial values setting
         self.value_mcts = self.slider_mcts.value()
@@ -67,11 +66,17 @@ class MyWindow(QMainWindow, form_class):
             qp.setBrush(Qt.SolidPattern)
             for x,y in self.pts:
                 qp.drawRect(x-2, y-2, 4, 4)
-        qp.setBrush(Qt.transparent)
-        qp.setPen(QPen(Qt.red, 3))
-        qp.drawRect(self.goal_area[0],self.goal_area[1],self.goal_area[2],self.goal_area[3])
         self.draw_label.setPixmap(self.pix)
         qp.end()
+    
+    def drawGoal(self, garea):
+        qp = QPainter(self.pix)
+        qp.setBrush(Qt.transparent)
+        qp.setPen(QPen(Qt.red, 3))
+        qp.drawRect(garea[0],garea[1],garea[2],garea[3])
+        self.draw_label.setPixmap(self.pix)
+        qp.end()
+        QApplication.processEvents()
 
     def drawPT(self, pos):
         qp = QPainter(self.pix)
@@ -80,6 +85,7 @@ class MyWindow(QMainWindow, form_class):
         qp.drawPoint(pos[0],pos[1])
         self.draw_label.setPixmap(self.pix)
         qp.end()
+        QApplication.processEvents()
 
     def drawRobotND(self,nd):
         qp = QPainter(self.pix)
@@ -122,7 +128,7 @@ class MyWindow(QMainWindow, form_class):
         self.treeWidget.clear()
         mcts = standard_MCTS(self, self.value_mcts, self.value_mcts_2)  
         start = time.time()
-        nds, maxNDs = mcts.mcts(self.start_pts[self.robot_type_idx], self.goal_area, self.pts)
+        nds, maxNDs = mcts.mcts(self.start_pts[self.robot_type_idx], self.pts)
         ts = time.time()-start
         print(ts)
 

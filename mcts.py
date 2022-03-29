@@ -64,7 +64,7 @@ class standard_MCTS:
         x,y = pt
         x_min, x_max = goal[0], goal[0]+goal[2]
         y_min, y_max = goal[1], goal[1]+goal[3]
-        if x_min<x<x_max  and y_min<y<y_max:
+        if x_min<=x<=x_max  and y_min<=y<=y_max:
             return 1    
         else:
             return 0
@@ -94,22 +94,29 @@ class standard_MCTS:
         print(nd.pos, nd.vis, nd.val, nd.utc, len(nd.childNDs))
 
     # selection -> expansion -> simulation -> backpropagation -> final selection
-    def mcts(self, spts, garea, pts):
+    def mcts(self, spts, pts):
         finalNDs = []
         maxNDs = []
         rootND = self.get_rootND(spts)
+
         for j in range(self.stepCount):
+            garea = [rootND.childNDs[0].pos[0]+200,200,100,100]
+            if garea[0] >= 950:
+                garea[0] = 950
+            self.window.drawGoal(garea)
             start = time.time()
+            temppts = [pt for pt in pts if pt[0]<(garea[0]+50)]
             for i in range(self.iterations):
-                seleND = self.selection(rootND, pts)
+                seleND = self.selection(rootND, temppts)
                 expaND = self.expansion(seleND)
-                result = self.simulation(expaND, pts, garea)
+                result = self.simulation(expaND, temppts, garea)
                 self.backprop(result, expaND)
             else:
                 spts, maxND = self.finalSelect(rootND)
                 ts = time.time()-start
                 print("#{} Iteration is done : {} s".format(j+1, ts))
-    
+                if maxND.pos[0] == 0:
+                    break
                 finalNDs.append(rootND.childNDs[0])
                 maxNDs.append(maxND)
 
@@ -120,7 +127,10 @@ class standard_MCTS:
                 legs = [rootND.pos]
                 for nd in rootND.childNDs:
                     legs.append(nd.pos)
-                if self.check_goal(self.get_robotCenter(legs),garea) == 1:
+                finalcenter = self.get_robotCenter(legs)
+                if self.check_goal(finalcenter,garea) == 1:
+                    break
+                elif finalcenter[0] >= garea[0]:
                     break
         
         return finalNDs, maxNDs
@@ -159,18 +169,18 @@ class standard_MCTS:
             robotCenter = self.get_robotCenter([stopLeg, moveLeg])
             if self.check_goal(robotCenter, goal) == 1:
                 return 1
-            elif robotCenter[0] > 950:
+            elif robotCenter[0] >= goal[0]:
                 return 0
             else:
-                candiPTs = self.findSimulPts(stopLeg, moveLeg, pts)
+                candiPTs = self.findSimulPts(stopLeg, moveLeg, pts) 
                 if len(candiPTs) == 0: ## There are no possible move points
-                    ## Change the move leg
-                    temp = stopLeg
-                    stopLeg = moveLeg
-                    moveLeg = temp
-                    candiPTs = self.findSimulPts(stopLeg, moveLeg, pts)
-                    if len(candiPTs) == 0:
-                        return 0
+                    # ## Change the move leg
+                    # temp = stopLeg
+                    # stopLeg = moveLeg
+                    # moveLeg = temp
+                    # candiPTs = self.findSimulPts(stopLeg, moveLeg, pts)
+                    # if len(candiPTs) == 0:
+                    return 0
                 moveLeg = stopLeg
                 stopLeg = candiPTs[random.randrange(len(candiPTs))]
 
